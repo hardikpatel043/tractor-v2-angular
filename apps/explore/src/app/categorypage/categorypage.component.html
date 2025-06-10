@@ -1,0 +1,16 @@
+<div data-boundary-page="explore">
+  <explore-header></explore-header>
+  <main class="e_CategoryPage">
+    <h2>{{ title() }}</h2>
+    <div class="e_CategoryPage__subline">
+      <p>{{ products()?.length }} products</p>
+      <explore-filter [filters]="filters()"></explore-filter>
+    </div>
+    <ul class="e_CategoryPage_list">
+      @for (p of products(); track $index) {
+      <explore-product [product]="p"></explore-product>
+      }
+    </ul>
+  </main>
+  <explore-footer></explore-footer>
+</div>

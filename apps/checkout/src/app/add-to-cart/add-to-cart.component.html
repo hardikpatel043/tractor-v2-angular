@@ -1,0 +1,28 @@
+<form class="c_AddToCart" data-boundary="checkout">
+  <input type="hidden" name="sku" [value]="sku" />
+  <div class="c_AddToCart__information">
+    <p>{{ variant.price }}</p>
+    @if (variant.inventory > 0) {
+    <p class="c_AddToCart__stock c_AddToCart__stock--ok">
+      {{ variant.inventory }} in stock, free shipping
+    </p>
+    } @else{
+    <p class="c_AddToCart__stock c_AddToCart__stock--empty">out of stock</p>
+
+    }
+  </div>
+  <checkout-button
+    [disabled]="outOfStock"
+    variant="primary"
+    (clicked)="submit($event)"
+  >
+    add to basket
+  </checkout-button>
+  <div
+    class="c_AddToCart__confirmed"
+    [ngClass]="{ 'c_AddToCart__confirmed--hidden': !isClicked }"
+  >
+    <p>Tractor was added.</p>
+    <a href="/checkout/cart" class="c_AddToCart__link"> View in basket. </a>
+  </div>
+</form>

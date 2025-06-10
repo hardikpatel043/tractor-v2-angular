@@ -1,0 +1,8 @@
+<li class="d_VariantOption">
+    <i class="d_VariantOption__color" [ngStyle]="{'background-color':variantOption.color}"></i>
+    @if (variantOption.selected) {
+    <strong>{{variantOption.name}}</strong>
+    }@else {
+    <a (click)="navigate()">{{variantOption.name}}</a>
+    }
+</li>

@@ -1,0 +1,16 @@
+<div data-boundary-page="explore">
+    <explore-header></explore-header>
+    <main class="e_HomePage">
+        @for (item of data.teaser; track item;let index = $index) {
+        <a class="e_HomePage__categoryLink" [href]="item.url">
+            <img [src]="src(item.image, 500)" [srcset]="srcset(item.image, [500, 1000])"
+                sizes="100vw, (min-width: 500px) 50vw" alt="" />
+            {{item.title}}
+        </a>
+        }
+        <div class="e_HomePage__recommendations">
+            <explore-recommendations [skus]="skus"></explore-recommendations>
+        </div>
+    </main>
+    <explore-footer></explore-footer>
+</div>

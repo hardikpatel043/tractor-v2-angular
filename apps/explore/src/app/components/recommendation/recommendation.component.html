@@ -1,0 +1,7 @@
+<li class="e_Recommendation">
+    <a class="e_Recommendation_link" [href]="props.url">
+        <img class="e_Recommendation_image" [src]="src(props.image, 200)" [srcset]="srcset(props.image, [200, 400])"
+            alt="" sizes="200px" width="200" height="200" />
+        <span class="e_Recommendation_name">{{props.name}}</span>
+    </a>
+</li>

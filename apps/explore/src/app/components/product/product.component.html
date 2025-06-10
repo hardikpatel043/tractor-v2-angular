@@ -1,0 +1,8 @@
+<li class="e_Product">
+    <a class="e_Product_link" [href]="product.url">
+        <img class="e_Product_image" [src]="src(product.image, 200)" [srcset]="srcset(product.image, [200, 400, 800])"
+            sizes="300px" width="200" height="200" alt=""/>
+        <span class="e_Product_name">{{product.name}}</span>
+        <span class="e_Product_price">{{fmtprice(product.startPrice)}}</span>
+    </a>
+</li>

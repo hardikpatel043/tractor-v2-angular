@@ -1,0 +1,30 @@
+@if(href() !== ''){
+<a
+  [href]="href()"
+  [attr.data-id]="dataId()"
+  [title]="title()"
+  [class]="classinternal()"
+>
+  <div class="c_Button__inner">
+    <ng-container *ngTemplateOutlet="projected" />
+  </div>
+</a>
+}@else {
+<button
+  [disabled]="disabled()"
+  [type]="type()"
+  [value]="value()"
+  [attr.data-id]="dataId()"
+  [title]="title()"
+  [class]="classinternal()"
+  (click)="clicked.emit($event)"
+>
+  <div class="c_Button__inner">
+    <ng-container *ngTemplateOutlet="projected" />
+  </div>
+</button>
+}
+
+<ng-template #projected>
+  <ng-content />
+</ng-template>

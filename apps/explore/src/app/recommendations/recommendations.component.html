@@ -1,0 +1,8 @@
+<div class="e_Recommendations" data-boundary="explore">
+    <h2>Recommendations</h2>
+    <ul class="e_Recommendations_list">
+        @for (item of recos; track $index) {
+        <explore-recommendation [props]="item"></explore-recommendation>
+        }
+    </ul>
+</div>

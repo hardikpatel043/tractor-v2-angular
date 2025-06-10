@@ -1,0 +1,129 @@
+{
+  "name": "tractor-store-angular",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/tractor-store-angular/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/tractor-store-angular",
+        "index": "apps/tractor-store-angular/src/index.html",
+        "main": "apps/tractor-store-angular/src/main.ts",
+        "polyfills": [
+          "zone.js"
+        ],
+        "tsConfig": "apps/tractor-store-angular/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/tractor-store-angular/public",
+            "output": "."
+          }
+        ],
+        "styles": [
+          "apps/tractor-store-angular/src/styles.scss"
+        ],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/tractor-store-angular/webpack.config.js"
+        },
+        "commonChunk": false,
+        "serviceWorker": true,
+        "ngswConfigPath": "apps/tractor-store-angular/ngsw-config.json"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/tractor-store-angular/webpack.prod.config.js"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "tractor-store-angular:build:production"
+        },
+        "development": {
+          "buildTarget": "tractor-store-angular:build:development"
+        },
+        "tractor": {
+          "buildTarget": "tractor-store-angular:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4200,
+        "publicHost": "http://localhost:4200"
+      }
+    },
+    "tractor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx serve checkout",
+          "nx serve decide",
+          "nx serve explore",
+          "nx serve tractor-store-angular"
+        ],
+        "parallel": true
+      }
+    },
+    "extract-i18n": {
+      "executor": "ngx-build-plus:extract-i18n",
+      "options": {
+        "buildTarget": "tractor-store-angular:build",
+        "extraWebpackConfig": "apps/tractor-store-angular/webpack.config.js"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/tractor-store-angular/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "tractor-store-angular:build",
+        "spa": true
+      }
+    }
+  }
+}

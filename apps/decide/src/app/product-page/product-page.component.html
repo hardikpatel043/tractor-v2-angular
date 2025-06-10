@@ -1,0 +1,44 @@
+<div data-boundary-page="decide">
+  <lib-mfe-loader
+    [config]="headerConfig"
+    [inputs]="headerInputs"
+  ></lib-mfe-loader>
+  <main class="d_ProductPage">
+    <div class="d_ProductPage__details">
+      <img
+        class="d_ProductPage__productImage"
+        [src]="src(variant().image, 400)"
+        [srcset]="srcset(variant().image, [400, 800])"
+        sizes="400px"
+        width="400"
+        height="400"
+        [alt]="name() + '-' + variant().name"
+      />
+      <div class="d_ProductPage__productInformation">
+        <h2 class="d_ProductPage__title">{{ name() }}</h2>
+        <ul class="d_ProductPage__highlights">
+          @for (highlight of highlights(); track $index) {
+          <li>{{ highlight }}</li>
+          }
+        </ul>
+        <ul class="d_ProductPage__variants">
+          @for (v of variants(); track $index) {
+          <decide-variant-option [variantOption]="v"></decide-variant-option>
+          }
+        </ul>
+        <lib-mfe-loader
+          [config]="addToCartConfig"
+          [inputs]="addToCartInputs"
+        ></lib-mfe-loader>
+      </div>
+    </div>
+    <lib-mfe-loader
+      [config]="recommendationConfig"
+      [inputs]="recommendationInputs"
+    ></lib-mfe-loader>
+  </main>
+  <lib-mfe-loader
+    [config]="footerConfig"
+    [inputs]="footerInputs"
+  ></lib-mfe-loader>
+</div>

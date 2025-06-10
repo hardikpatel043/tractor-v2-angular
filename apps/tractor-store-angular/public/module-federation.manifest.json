@@ -1,0 +1,5 @@
+{
+  "checkout": "http://localhost:4201/remoteEntry.js",
+  "decide": "http://localhost:4203/remoteEntry.js",
+  "explore": "http://localhost:4202/remoteEntry.js"
+}
