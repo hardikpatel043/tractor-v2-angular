@@ -1,1 +1,39 @@
-<p>line-item works!</p>
+@if (item) {
+<li class="c_LineItem">
+  <div class="c_LineItem__image">
+    <img [src]="item.image" [alt]="item.name" />
+  </div>
+  <div class="c_LineItem__details">
+    <h3 class="c_LineItem__name">{{ item.name }}</h3>
+    <p class="c_LineItem__sku">SKU: {{ item.sku }}</p>
+    <p class="c_LineItem__price">${{ item.price }}</p>
+  </div>
+  <div class="c_LineItem__quantity">
+    <checkout-button 
+      (clicked)="updateQuantity(-1)"
+      [disabled]="item.quantity <= 1"
+      variant="secondary"
+      class="c_LineItem__quantityBtn">
+      -
+    </checkout-button>
+    <span class="c_LineItem__quantityValue">{{ item.quantity }}</span>
+    <checkout-button 
+      (clicked)="updateQuantity(1)"
+      [disabled]="item.quantity >= item.inventory"
+      variant="secondary"
+      class="c_LineItem__quantityBtn">
+      +
+    </checkout-button>
+  </div>
+  <div class="c_LineItem__total">
+    ${{ item.total }}
+  </div>
+  <div class="c_LineItem__actions">
+    <checkout-button 
+      (clicked)="onRemove()"
+      variant="secondary">
+      Remove
+    </checkout-button>
+  </div>
+</li>
+}

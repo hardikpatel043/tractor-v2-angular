@@ -4,18 +4,36 @@
     [inputs]="headerInputs"
   ></lib-mfe-loader>
 
-  <main className="c_CartPage">
+  <main class="c_CartPage">
     <h2>Basket</h2>
-    <ul className="c_CartPage__lineItems">
-      @for (item of lineItems; track $index) {
-      <checkout-line-item></checkout-line-item>
-      }
-    </ul>
-    <hr />
-    <div className="c_CartPage__buttons">
-      <checkout-button [href]="'/checkout/checkout'" [variant]="'primary'"
-        >Checkout</checkout-button
-      >
-    </div>
+    @if (lineItems().length === 0) {
+      <div class="c_CartPage__empty">
+        <p>Your basket is empty</p>
+        <checkout-button [href]="'/explore'" variant="primary">
+          Continue Shopping
+        </checkout-button>
+      </div>
+    } @else {
+      <ul class="c_CartPage__lineItems">
+        @for (item of lineItems(); track item.sku) {
+          <checkout-line-item 
+            [item]="item"
+            (removeItem)="onRemoveItem($event)">
+          </checkout-line-item>
+        }
+      </ul>
+      <hr />
+      <div class="c_CartPage__total">
+        <strong>Total: ${{ total() }}</strong>
+      </div>
+      <div class="c_CartPage__buttons">
+        <checkout-button (clicked)="clearCart()" variant="secondary">
+          Clear Cart
+        </checkout-button>
+        <checkout-button [href]="'/checkout/checkout'" variant="primary">
+          Checkout
+        </checkout-button>
+      </div>
+    }
   </main>
 </div>

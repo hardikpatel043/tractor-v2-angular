@@ -33,3 +33,20 @@
 .c_CartPage__buttons > * {
   flex: 0;
 }
+
+.c_CartPage__empty {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.c_CartPage__empty p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.c_CartPage__total {
+  margin: 2rem 0 3rem;
+  text-align: right;
+  font-size: 1.3rem;
+}

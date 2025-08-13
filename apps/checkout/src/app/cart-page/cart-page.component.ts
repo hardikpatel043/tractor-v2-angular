@@ -1,11 +1,13 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import {
   Component,
-  Inject,
   OnInit,
   ViewChild,
   ViewContainerRef,
   inject,
+  signal,
+  effect,
+  computed,
 } from '@angular/core';
 
 import { ButtonComponent } from '../components/Button/Button.component';
@@ -19,11 +21,11 @@ import { StoreService } from '../data/store.service';
   selector: 'checkout-cart',
   imports: [CommonModule, ButtonComponent, LineItemComponent, MfeLoaderModule],
   templateUrl: './cart-page.component.html',
-  providers: [{ provide: 'token', useClass: StoreService }],
   styleUrl: './cart-page.component.scss',
 })
 export class CartPageComponent implements OnInit {
   dataSvc = inject(DataService);
+  dataStore = inject(StoreService);
 
   headerConfig = {
     REMOTE_URL: 'http://localhost:4202/remoteEntry.js',
@@ -33,9 +35,7 @@ export class CartPageComponent implements OnInit {
 
   headerInputs = {};
 
-  total = 0;
-  skus: any[] = [];
-  lineItems: {
+  lineItems = signal<{
     quantity: number;
     total: number;
     id: string;
@@ -44,16 +44,44 @@ export class CartPageComponent implements OnInit {
     price: number;
     image: string;
     inventory: number;
-  }[] = [];
+  }[]>([]);
 
-  constructor(@Inject('token') private dataStore: StoreService) {}
+  total = computed(() => 
+    this.lineItems().reduce((res, { total }) => res + total, 0)
+  );
+
+  skus = computed(() => 
+    this.lineItems().map(({ sku }) => sku)
+  );
+
+  constructor() {
+    // Make cart page reactive to cart changes
+    effect(() => {
+      const rawLineItems = this.dataStore.useLineItems()();
+      console.log('Cart page effect triggered with items:', rawLineItems);
+      this.lineItems.set(this.convertToLineItems(rawLineItems));
+    });
+  }
 
   ngOnInit(): void {
-    const rawLineItems = this.dataStore.useLineItems();
-    console.log(rawLineItems());
-    this.lineItems = this.convertToLineItems(rawLineItems());
-    this.total = this.lineItems.reduce((res, { total }) => res + total, 0);
-    this.skus = this.lineItems.map(({ sku }) => sku);
+    // Ensure StoreService is initialized
+    console.log('CartPageComponent initialized, current cart state:', this.dataStore.store());
+    
+    // Force an initial update in case we missed any events
+    const currentItems = this.dataStore.useLineItems()();
+    this.lineItems.set(this.convertToLineItems(currentItems));
+  }
+
+  onRemoveItem(sku: string) {
+    window.dispatchEvent(
+      new CustomEvent('remove-from-cart', {
+        detail: { sku },
+      })
+    );
+  }
+
+  clearCart() {
+    window.dispatchEvent(new CustomEvent('clear-cart'));
   }
 
   convertToLineItems(items: Array<{ sku: string; quantity: number }>) {
