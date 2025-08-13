@@ -8,7 +8,7 @@
     <h2>Basket</h2>
     <ul className="c_CartPage__lineItems">
       @for (item of lineItems; track $index) {
-      <checkout-line-item></checkout-line-item>
+      <checkout-line-item [item]="item"></checkout-line-item>
       }
     </ul>
     <hr />

@@ -1,12 +1,6 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import {
-  Component,
-  Inject,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-  inject,
-} from '@angular/core';
+
+import { Component, effect, inject } from '@angular/core';
 
 import { ButtonComponent } from '../components/Button/Button.component';
 import { CommonModule } from '@angular/common';
@@ -19,10 +13,10 @@ import { StoreService } from '../data/store.service';
   selector: 'checkout-cart',
   imports: [CommonModule, ButtonComponent, LineItemComponent, MfeLoaderModule],
   templateUrl: './cart-page.component.html',
-  providers: [{ provide: 'token', useClass: StoreService }],
+  // ...existing code...
   styleUrl: './cart-page.component.scss',
 })
-export class CartPageComponent implements OnInit {
+export class CartPageComponent {
   dataSvc = inject(DataService);
 
   headerConfig = {
@@ -34,7 +28,7 @@ export class CartPageComponent implements OnInit {
   headerInputs = {};
 
   total = 0;
-  skus: any[] = [];
+  skus: string[] = [];
   lineItems: {
     quantity: number;
     total: number;
@@ -46,14 +40,13 @@ export class CartPageComponent implements OnInit {
     inventory: number;
   }[] = [];
 
-  constructor(@Inject('token') private dataStore: StoreService) {}
-
-  ngOnInit(): void {
-    const rawLineItems = this.dataStore.useLineItems();
-    console.log(rawLineItems());
-    this.lineItems = this.convertToLineItems(rawLineItems());
-    this.total = this.lineItems.reduce((res, { total }) => res + total, 0);
-    this.skus = this.lineItems.map(({ sku }) => sku);
+  constructor(private dataStore: StoreService) {
+    effect(() => {
+      const rawLineItems = this.dataStore.useLineItems()();
+      this.lineItems = this.convertToLineItems(rawLineItems);
+      this.total = this.lineItems.reduce((res, { total }) => res + total, 0);
+      this.skus = this.lineItems.map(({ sku }) => sku);
+    });
   }
 
   convertToLineItems(items: Array<{ sku: string; quantity: number }>) {
@@ -78,6 +71,3 @@ export class CartPageComponent implements OnInit {
         return res;
       },
       []
-    );
-  }
-}

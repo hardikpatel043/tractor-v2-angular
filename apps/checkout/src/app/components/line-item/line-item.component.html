@@ -1,1 +1,12 @@
-<p>line-item works!</p>
+<div class="line-item">
+  <img [src]="item?.image" alt="{{ item?.name }}" width="60" height="60" />
+  <div class="line-item-details">
+    <div>
+      <strong>{{ item?.name }}</strong>
+    </div>
+    <div>SKU: {{ item?.sku }}</div>
+    <div>Price: ${{ item?.price }}</div>
+    <div>Quantity: {{ item?.quantity }}</div>
+    <div>Total: ${{ item?.total }}</div>
+  </div>
+</div>

@@ -9,7 +9,7 @@ import { StoreService } from '../data/store.service';
 @Component({
   selector: 'checkout-add-to-cart',
   imports: [CommonModule, ButtonComponent],
-  providers: [{ provide: 'token', useClass: StoreService }],
+  // ...existing code...
   templateUrl: './add-to-cart.component.html',
   styleUrl: './add-to-cart.component.scss',
 })
@@ -30,7 +30,7 @@ export class AddToCartComponent implements OnInit {
   outOfStock = true;
   isClicked = false;
 
-  constructor(@Inject('token') private storeService: StoreService) {}
+  constructor(private storeService: StoreService) {}
 
   ngOnInit(): void {
     this.variant = this.dataSvc.data.variants.find(
