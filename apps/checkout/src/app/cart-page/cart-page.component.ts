@@ -71,3 +71,6 @@ export class CartPageComponent {
         return res;
       },
       []
+    );
+  }
+}
