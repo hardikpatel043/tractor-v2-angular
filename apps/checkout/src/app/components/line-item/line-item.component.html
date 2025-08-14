@@ -1,1 +1,25 @@
-<p>line-item works!</p>
+<li class="c_LineItem" *ngIf="item">
+  <div class="c_LineItem__image">
+    <img [src]="item.image" [alt]="item.name" />
+  </div>
+  <div class="c_LineItem__details">
+    <h3 class="c_LineItem__name">{{ item.name }}</h3>
+    <p class="c_LineItem__sku">SKU: {{ item.sku }}</p>
+    <p class="c_LineItem__price">${{ item.price.toFixed(2) }}</p>
+  </div>
+  <div class="c_LineItem__quantity">
+    <span>Qty: {{ item.quantity }}</span>
+  </div>
+  <div class="c_LineItem__total">
+    <strong>${{ item.total.toFixed(2) }}</strong>
+  </div>
+  <div class="c_LineItem__actions">
+    <button 
+      type="button" 
+      class="c_LineItem__remove" 
+      (click)="removeFromCart()"
+      aria-label="Remove item from cart">
+      Remove
+    </button>
+  </div>
+</li>

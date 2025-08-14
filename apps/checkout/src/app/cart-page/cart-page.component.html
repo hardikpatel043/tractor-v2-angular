@@ -6,16 +6,32 @@
 
   <main className="c_CartPage">
     <h2>Basket</h2>
-    <ul className="c_CartPage__lineItems">
-      @for (item of lineItems; track $index) {
-      <checkout-line-item></checkout-line-item>
-      }
-    </ul>
-    <hr />
-    <div className="c_CartPage__buttons">
-      <checkout-button [href]="'/checkout/checkout'" [variant]="'primary'"
-        >Checkout</checkout-button
-      >
-    </div>
+    @if (lineItems.length === 0) {
+      <div className="c_CartPage__empty">
+        <p>Your cart is empty</p>
+        <checkout-button [href]="'/explore'" [variant]="'secondary'">Continue Shopping</checkout-button>
+      </div>
+    } @else {
+      <ul className="c_CartPage__lineItems">
+        @for (item of lineItems; track item.sku) {
+          <checkout-line-item [item]="item"></checkout-line-item>
+        }
+      </ul>
+      <hr />
+      <div className="c_CartPage__total">
+        <h3>Total: ${{ total.toFixed(2) }}</h3>
+      </div>
+      <div className="c_CartPage__buttons">
+        <checkout-button [href]="'/checkout/checkout'" [variant]="'primary'"
+          >Checkout</checkout-button
+        >
+        <button 
+          type="button" 
+          className="c_CartPage__clearBtn"
+          (click)="clearCart()">
+          Clear Cart
+        </button>
+      </div>
+    }
   </main>
 </div>
