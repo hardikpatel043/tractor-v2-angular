@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 
 import { ButtonComponent } from '../components/Button/Button.component';
 import { CommonModule } from '@angular/common';
@@ -9,7 +9,6 @@ import { StoreService } from '../data/store.service';
 @Component({
   selector: 'checkout-add-to-cart',
   imports: [CommonModule, ButtonComponent],
-  providers: [{ provide: 'token', useClass: StoreService }],
   templateUrl: './add-to-cart.component.html',
   styleUrl: './add-to-cart.component.scss',
 })
@@ -18,6 +17,7 @@ export class AddToCartComponent implements OnInit {
 
   route = inject(Router);
   dataSvc = inject(DataService);
+  storeService = inject(StoreService);
 
   variant = {
     id: '',
@@ -29,8 +29,6 @@ export class AddToCartComponent implements OnInit {
   };
   outOfStock = true;
   isClicked = false;
-
-  constructor(@Inject('token') private storeService: StoreService) {}
 
   ngOnInit(): void {
     this.variant = this.dataSvc.data.variants.find(

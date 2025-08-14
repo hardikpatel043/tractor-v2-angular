@@ -7,11 +7,14 @@
   <main className="c_CartPage">
     <h2>Basket</h2>
     <ul className="c_CartPage__lineItems">
-      @for (item of lineItems; track $index) {
-      <checkout-line-item></checkout-line-item>
+      @for (item of lineItems(); track $index) {
+      <checkout-line-item [item]="item"></checkout-line-item>
       }
     </ul>
     <hr />
+    <div className="c_CartPage__total">
+      Total: ${{ total() }}
+    </div>
     <div className="c_CartPage__buttons">
       <checkout-button [href]="'/checkout/checkout'" [variant]="'primary'"
         >Checkout</checkout-button

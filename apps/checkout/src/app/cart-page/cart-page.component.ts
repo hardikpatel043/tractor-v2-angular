@@ -1,14 +1,17 @@
 /* eslint-disable @nx/enforce-module-boundaries */
+
 import {
+  ChangeDetectorRef,
   Component,
-  Inject,
+  OnDestroy,
   OnInit,
-  ViewChild,
-  ViewContainerRef,
+  computed,
+  effect,
   inject,
 } from '@angular/core';
 
 import { ButtonComponent } from '../components/Button/Button.component';
+import { CartItem } from '@tractor-store-angular/utils';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../data/data.service';
 import { LineItemComponent } from '../components/line-item/line-item.component';
@@ -19,11 +22,11 @@ import { StoreService } from '../data/store.service';
   selector: 'checkout-cart',
   imports: [CommonModule, ButtonComponent, LineItemComponent, MfeLoaderModule],
   templateUrl: './cart-page.component.html',
-  providers: [{ provide: 'token', useClass: StoreService }],
   styleUrl: './cart-page.component.scss',
 })
-export class CartPageComponent implements OnInit {
+export class CartPageComponent implements OnInit, OnDestroy {
   dataSvc = inject(DataService);
+  dataStore = inject(StoreService);
 
   headerConfig = {
     REMOTE_URL: 'http://localhost:4202/remoteEntry.js',
@@ -33,30 +36,45 @@ export class CartPageComponent implements OnInit {
 
   headerInputs = {};
 
-  total = 0;
-  skus: any[] = [];
-  lineItems: {
-    quantity: number;
-    total: number;
-    id: string;
-    name: string;
-    sku: string;
-    price: number;
-    image: string;
-    inventory: number;
-  }[] = [];
+  // Use computed signals for reactive data
+  lineItems = computed(() => {
+    const rawItems = this.dataStore.useLineItems()();
+    console.log('Computing line items from raw data:', rawItems);
+    return this.convertToLineItems(rawItems);
+  });
 
-  constructor(@Inject('token') private dataStore: StoreService) {}
+  total = computed(() => {
+    const items = this.lineItems();
+    const totalAmount = items.reduce((res, { total }) => res + total, 0);
+    console.log('Computing total:', totalAmount);
+    return totalAmount;
+  });
+
+  skus = computed(() => {
+    return this.lineItems().map(({ sku }) => sku);
+  });
+
+  private updateCartHandler = () => {
+    console.log('Cart update event received');
+    // No need to manually update since we're using computed signals
+  };
 
   ngOnInit(): void {
-    const rawLineItems = this.dataStore.useLineItems();
-    console.log(rawLineItems());
-    this.lineItems = this.convertToLineItems(rawLineItems());
-    this.total = this.lineItems.reduce((res, { total }) => res + total, 0);
-    this.skus = this.lineItems.map(({ sku }) => sku);
+    console.log('Cart page initialized');
+    // Listen for cart updates (though computed signals should handle reactivity)
+    window.addEventListener('updated-cart', this.updateCartHandler);
+    
+    // Create an effect to log changes
+    effect(() => {
+      console.log('Cart effect triggered, current items:', this.lineItems());
+    });
   }
 
-  convertToLineItems(items: Array<{ sku: string; quantity: number }>) {
+  ngOnDestroy(): void {
+    window.removeEventListener('updated-cart', this.updateCartHandler);
+  }
+
+  convertToLineItems(items: CartItem[]) {
     return items.reduce(
       (
         res: Array<{

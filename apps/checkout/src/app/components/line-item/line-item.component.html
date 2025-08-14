@@ -1,1 +1,14 @@
-<p>line-item works!</p>
+@if (item) {
+<li class="c_LineItem">
+  <img [src]="item.image.replace('[size]', '200')" [alt]="item.name" class="c_LineItem__image" />
+  <div class="c_LineItem__details">
+    <h3 class="c_LineItem__name">{{ item.name }}</h3>
+    <p class="c_LineItem__sku">SKU: {{ item.sku }}</p>
+    <div class="c_LineItem__pricing">
+      <span class="c_LineItem__price">${{ item.price }}</span>
+      <span class="c_LineItem__quantity">Qty: {{ item.quantity }}</span>
+      <span class="c_LineItem__total">${{ item.total }}</span>
+    </div>
+  </div>
+</li>
+}
